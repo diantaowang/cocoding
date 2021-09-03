@@ -1,13 +1,4 @@
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <map>
-#include <set>
-#include <iostream>
-#include <tuple>
-#include <queue>
-#include <stack>
-#include <unordered_map>
+#include <bits/stdc++.h>
 
 using namespace::std;
 
@@ -26,26 +17,26 @@ public:
 
 class Solution {
 public:
-    Node* copyList(Node* head) {
-        if (head == nullptr)
-            return nullptr;
-        if (addr.find(head) != addr.end())
-            return addr[head];
-
-        auto ptr = new Node(head->val);
-        addr[head] = ptr;
-        
-        addr[head]->next = copyList(head->next);
-        addr[head]->random = copyList(head->random);
-
-        return addr[head];
-    };
-    
     Node* copyRandomList(Node* head) {
-        return copyList(head);
+        Node* ptr = head;
+        while (ptr) {
+            if (dicts.find(ptr) == dicts.end()) {
+                dicts[ptr] = new Node(ptr->val);
+            }
+            if (dicts.find(ptr->next) == dicts.end()) {
+                dicts[ptr->next] = new Node(ptr->next->val);
+            }
+            if (dicts.find(ptr->random) == dicts.end()) {
+                dicts[ptr->random] = new Node(ptr->random->val);
+            }
+            dicts[ptr]->next = dicts[ptr->next];
+            dicts[ptr]->random = dicts[ptr->random];
+            ptr = ptr->next;
+        }
+        return dicts[head];
     }
 private:
-    unordered_map<Node*, Node*> addr;
+    unordered_map<Node*, Node*> dicts{{nullptr, nullptr}};
 };
 
 int main()

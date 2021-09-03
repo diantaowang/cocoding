@@ -1,33 +1,25 @@
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <map>
-#include <set>
-#include <iostream>
-#include <tuple>
-#include <queue>
-#include <stack>
+#include <bits/stdc++.h>
 
 using namespace::std;
 
 class Solution {
 public:
-    Solution(vector<int>& w) {
-        int n = w.size();
-        prefix.resize(n);
-        prefix[0] = w[0];
-        for (int i = 1; i < n; ++i)
-            prefix[i] = prefix[i - 1] + w[i];
-        srand((unsigned)time(0));
+    Solution(vector<int>& w) { 
+        int val = 0;
+        for (const auto &e : w) {
+            val += e;
+            sum.emplace_back(val);
+        }
+        srand((unsigned) time(NULL));
     }
     
     int pickIndex() {
-        unsigned val = rand() % prefix.back();
-        auto pos = upper_bound(prefix.begin(), prefix.end(), val);
-        return pos - prefix.begin();
+        int val = rand() % (sum.back());
+        return upper_bound(sum.begin(), sum.end(), val) - sum.begin();
     }
+
 private:
-    vector<int> prefix;
+    vector<int> sum;
 };
 
 /**
